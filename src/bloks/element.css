@@ -1,0 +1,113 @@
+ .element{
+    margin:0;
+    padding: 50px 8vw;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    column-gap: 7%;
+    box-sizing: border-box;
+}
+.element__card{
+    background-color: ghostwhite;
+    width:282px;
+    height: 361px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.template-element{
+  display: none;
+}
+.element__card-trash{
+    border: none;
+    background-size: 100%;
+    background: url('../images/Trash.svg') center no-repeat;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    opacity: 1;
+    position:absolute;
+    top:10px;
+    right: 10px;
+}
+.element__card-trash:hover{
+    transform: scale(1.3);
+    opacity: .5;
+}
+.element__card-image{
+    height:264px;
+    width: 100%;
+    object-fit: cover; 
+    background-size: cover;
+    background-position: center;
+}
+.element__card-info{
+    display: flex;
+    align-items: center;
+    padding: 10px;            
+    align-items: center;
+}
+.element__card-text{
+    line-height: normal;
+    font-size:24px;
+    font-family: "inter",Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    color: black;
+    white-space: nowrap;        
+    overflow: hidden;           
+    text-overflow: ellipsis;    
+    width:80%;
+}
+.element__card-heart {
+  border: none;
+  background: url(https://practicum-content.s3.us-west-1.amazonaws.com/web-code/dom/moved_heart.svg) center no-repeat;
+  background-size: 100%;
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  margin-left: auto;
+  right: 10px;
+  opacity: 1;
+  transition: 0.3s;
+}
+
+.element__card-heart:hover {
+  transform: scale(1.3);
+  opacity: .5;
+}
+
+.element__card-heart_active {
+  opacity: 1;
+  background: url(https://practicum-content.s3.us-west-1.amazonaws.com/web-code/dom/moved_heart-filled.svg) center no-repeat;
+}
+@media (max-width:1230px){
+
+}
+@media (max-width:1024px) {
+    .element{
+        padding:50px 7vw;
+    }
+    .image-window__button-close{
+        top: 45px;
+        right: 50px;
+        font-size: 70px;
+    }
+}
+@media (max-width:544px) {
+    .element{
+        padding: 50px 10vw 30px;
+    }
+    .element__card-text{
+        width: 210px;
+    }
+    .element__card-heart{
+        width:30px;
+        font-size: 40px;
+    }
+    .image-window__button-close{
+        top: 180px;
+        right: 12px;
+        font-size: 40px;
+    }
+}

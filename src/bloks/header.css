@@ -1,0 +1,47 @@
+.header{
+    margin:5vw 5vw;
+    height: 3rem;
+    padding: 0;
+}
+.header__title{
+    display: flex;
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    justify-content: start;
+}
+
+.header__title_big{
+    font-weight: bold;
+    margin: 0;
+    font-size: 70px;
+    margin-top: 5px;
+}
+.header__title_little-up{
+    margin-top: 0;
+    font-weight: normal;
+    font-size: 20x;
+}
+.header__line{
+    position: relative;
+    top: 10px;
+    border: none;
+    height: 1px;
+    background: #444444;
+}
+
+@media (max-width:1024px){
+    .header{
+        margin:5vw 7vw;
+    }
+}
+@media (max-width: 544px){
+    .header{
+        margin: 50px 13vw;
+    }
+    .header__title_big{
+        font-size: 30px;
+    }
+    .header__title_little-up{
+        font-size: 15px;
+    }
+}
+

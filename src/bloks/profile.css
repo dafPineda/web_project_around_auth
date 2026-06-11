@@ -1,0 +1,183 @@
+.profile{
+    margin:0 8vw;
+    display: grid;
+    grid-template-columns: 1fr 2.5fr 0.5fr 1.5fr;
+    grid-template-rows: repeat(2,1fr);
+    row-gap:20px;
+    column-gap: 5px;
+}
+.profile__image{
+    grid-column:1;
+    grid-row: 1/3;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    min-width: 180px;
+    height: 180px;
+    cursor: pointer;
+    position: relative;
+}
+.profile__image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.edit-icon {
+    z-index: 2;
+    background-image: url(../images/editAvatar.png);
+    background-repeat: no-repeat;
+    background-size: contain; 
+    width: 50%; 
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+.profile__image:hover::before {
+    z-index: 1;
+  opacity: 1;
+}
+.profile__image:hover .edit-icon {
+  opacity: 1;
+}
+.profile__name{
+    width: 100%;
+    grid-column: 2;
+    grid-row: 1;
+    margin:0;
+    margin-left: 5px;
+    align-self: end;
+    line-height: normal;
+    font-size: 50px;
+    font-weight: bold;
+    font-family: 'inter', Arial, Helvetica, sans-serif;
+    white-space: nowrap;        
+    overflow: hidden;           
+    text-overflow: ellipsis;   
+}
+.profile__ocupation{
+    grid-column: 2;
+    grid-row: 2;
+    margin:0;
+    margin-left: 10px;
+    font: size 25px;
+    font-weight: bold;
+    font-family: 'inter', Arial, Helvetica, sans-serif;
+}
+.profile__button-edit{
+    background-color: black;
+    grid-column:3;
+    grid-row: 1/2;
+    border: 2px solid rgb(0, 0, 0); 
+    padding: 10px;
+    width:60px;
+    height: 40px;
+    align-self: center;
+    cursor: pointer;
+}
+.profile__button-edit svg{
+    background-color: white;
+}
+.profile__button-edit svg:hover{
+    background-color: gray;
+}
+.profile__button-add{
+    grid-column: 4/5;
+    grid-row: 1/3;
+    background-color: #111;
+    color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    font-size: 60px;
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+    transition: 0.2s;
+    justify-self: end;
+    align-self: center;
+}
+.profile__button-add:hover{
+    background-color: rgb(63, 61, 61);
+}
+@media(max-width:1024px){
+    .profile{
+        margin: 0 7vw;
+        grid-template-columns: 1fr 3fr 0.5fr 1fr;
+    }
+    .profile__image{
+        min-width: 120px;
+        height: 120px;
+    }
+    .profile__name{
+        font-size: 40px;
+    }
+    .profile__button-edit{
+        width: 40px;
+        padding: 2px;
+    }
+    .profile__button-add{
+        font-size: 45px;
+        width: 145px;
+    }
+}
+@media (max-width:544px){
+    .profile{
+        margin:0 9vw;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 6fr 1fr 1fr 2fr ;
+        gap:10px;
+        column-gap: 5px;
+    }
+    .profile__image{
+        grid-row: 1;
+        grid-column: 1/5;
+        width: 180px;
+        height: 180px;
+        align-self: center;
+        justify-self: center;
+        padding:8px;
+    }
+    .profile__name{
+        grid-row: 2;
+        grid-column: 1/4;
+        justify-self: end;
+        align-self: end;
+        font-size: 22px;
+        height: auto;
+        width: 198px;
+    }
+    .profile__button-edit{
+        grid-row: 2;
+        grid-column: 4/5;
+        justify-self: start;
+        align-self: end;
+        width: 25px;
+        margin: 0;
+        padding: 0;
+        height: 25px;
+    }
+    .profile__ocupation{
+        grid-row: 3;
+        grid-column: 1/6;
+        justify-self: center;
+        align-items: end;
+        font-size: 10px;
+        margin:0;
+        height: 2rem;
+    }
+    .profile__button-add{
+        grid-row: 4;
+        grid-column:1/6;
+        justify-self: center;
+        align-self: center;
+        font-size: 40px;
+        width: 100%;
+    }
+}
+
