@@ -1,15 +1,21 @@
 import Header from "./Header/Header"
 import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
+import Login from "./Login/Login"
+import Register from "./Register/Register"
+import ProtectedRoute from "./ProtectedRoute"
 import { useState, useEffect } from "react"
 import CurrentUserContext from "../contexts/CurrentUserContext"
 import Api from "../utils/api"
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 const api = new Api("https://around-api.es.tripleten-services.com/v1", {Authorization:"39e7e87b-63d8-4747-bf9f-2089ed281080", "Content-Type": "application/json"})
+
 function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
   const [popup, setPopup] = useState(null)
+  const [isLoggedIn, setIsLoggedIn]= useState(true)
 
   useEffect(()=>{
     api.getAppInfo()
@@ -66,20 +72,35 @@ function App() {
   };
   return (
     <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>
-    <div className="page">
       <Header/>
-      <Main 
-        onOpenPopup={handleOpenPopup}
-        onClosePopup={handleClosePopup}
-        popup={popup}
-        cards={cards} 
-        setPopup={setPopup}
-        onCardClick={handleCardLike}
-        onCardDelete={handleCardDelete}
-        onAddPlaceSubmit={handleAddPlaceSubmit}/>
-      <Footer/>  
-    </div>
+      <Routes className="page">
+        <Route
+          path="/" 
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Main 
+                onOpenPopup={handleOpenPopup}
+                onClosePopup={handleClosePopup}
+                popup={popup}
+                cards={cards} 
+                setPopup={setPopup}
+                onCardClick={handleCardLike}
+                onCardDelete={handleCardDelete}
+                onAddPlaceSubmit={handleAddPlaceSubmit}/>
+            </ProtectedRoute>
+          }
+            />
+        <Route path="/signup" element={<Login/>}/>
+        <Route path="/signin" element={<Register/>}/>
 
+        <Route path="*" element={
+          isLoggedIn ? (
+            <Navigate to="/" replace/>):(
+            <Navigate to="/signin" replace/>
+          )
+        }/> 
+      </Routes>
+      <Footer/>  
     </CurrentUserContext.Provider>
   )
 }
