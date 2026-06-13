@@ -3,11 +3,12 @@ import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import Login from "./Login/Login"
 import Register from "./Register/Register"
-import ProtectedRoute from "./ProtectedRoute"
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute"
 import { useState, useEffect } from "react"
 import CurrentUserContext from "../contexts/CurrentUserContext"
 import Api from "../utils/api"
 import { Routes, Route, Navigate } from 'react-router-dom';
+import InfoTooltip from "./InfoTooltip/InfoTooltip"
 
 const api = new Api("https://around-api.es.tripleten-services.com/v1", {Authorization:"39e7e87b-63d8-4747-bf9f-2089ed281080", "Content-Type": "application/json"})
 
@@ -15,7 +16,9 @@ function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
   const [popup, setPopup] = useState(null)
-  const [isLoggedIn, setIsLoggedIn]= useState(true)
+  const [isLoggedIn, setIsLoggedIn]= useState(false)
+  const [infoTooltip, setInfoTooltip] = useState({ isOpen: false, isSuccess: false });
+
 
   useEffect(()=>{
     api.getAppInfo()
@@ -70,6 +73,9 @@ function App() {
        })
        .catch((error) => console.error(error));
   };
+  function handleCloseInfoTooltip() {
+    setInfoTooltip({ isOpen: false, isSuccess: false });
+  }
   return (
     <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>
       <Header/>
@@ -100,6 +106,11 @@ function App() {
           )
         }/> 
       </Routes>
+      <InfoTooltip
+        isOpen={infoTooltip.isOpen}
+        onClose={handleCloseInfoTooltip}
+        isSuccess={infoTooltip.isSuccess}
+      />
       <Footer/>  
     </CurrentUserContext.Provider>
   )
