@@ -20,6 +20,10 @@
     font-weight: normal;
     font-size: 20x;
 }
+.heder__session{
+    margin-top: auto;
+    margin-left: auto;
+}
 .header__line{
     position: relative;
     top: 10px;

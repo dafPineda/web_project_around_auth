@@ -78,7 +78,7 @@ function App() {
   }
   return (
     <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>
-      <Header/>
+      <Header isLoggedIn={isLoggedIn}/>
       <Routes className="page">
         <Route
           path="/" 
@@ -96,13 +96,13 @@ function App() {
             </ProtectedRoute>
           }
             />
-        <Route path="/signup" element={<Login/>}/>
-        <Route path="/signin" element={<Register/>}/>
+        <Route path="/web_project_around_react/signin" element={<Login/>}/>
+        <Route path="/web_project_around_react/signup" element={<Register/>}/>
 
         <Route path="*" element={
           isLoggedIn ? (
             <Navigate to="/" replace/>):(
-            <Navigate to="/signin" replace/>
+            <Navigate to="/web_project_around_react/signin" replace/>
           )
         }/> 
       </Routes>

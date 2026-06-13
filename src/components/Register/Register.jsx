@@ -12,7 +12,6 @@ export default function Register(){
     }
     const handleSubmit = (event) => {
         event.preventDefault(); 
-        console.log(email, password) 
     };
     return(
         <section className="sign">
@@ -26,6 +25,7 @@ export default function Register(){
                     id="email"
                     type="email"
                     value={email}
+                    onChange={handleEmailChange}
                     required
                     onChange={handleEmailChange}/>
                     <input
@@ -35,6 +35,7 @@ export default function Register(){
                     id="password"
                     type="string"
                     value={password}
+                    onChange={handlePasswordtChange}
                     required
                     onChange={handlePasswordtChange}
                     />
