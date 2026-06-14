@@ -2,25 +2,35 @@
 * https://dafpineda.github.io/web_project_around_react/
 # Web Project Around React
 
-Aplicación web desarrollada con React + Vite, enfocada en la gestión y visualización de contenido dinámico (cards, perfil de usuario y popups interactivos).
+Aplicación web desarrollada con React + Vite, enfocada en la gestión y visualización de contenido dinámico (cards, perfil de usuario, popups interactivos y autenticación de usuarios).
 
 # Descripción del proyecto
 
 Este proyecto consiste en una interfaz interactiva donde el usuario puede:
 
+* Registrarse e iniciar sesión mediante autenticación con JWT
 * Visualizar información de perfil
 * Renderizar tarjetas dinámicamente
-* Interactuar con elementos (abrir popups, editar contenido)
+* Interactuar con elementos (abrir popups, editar contenido, dar like, eliminar tarjetas)
+* Manejar rutas protegidas según el estado de autenticación
 * Manejar eventos en React correctamente
 
-El objetivo principal fue entender el flujo de renderizado en React y cómo preparar una app para producción.
+El objetivo principal fue entender el flujo de renderizado en React, el manejo de autenticación y rutas, el uso de Context API para compartir estado global, y cómo preparar una app para producción.
 
 ## Tecnologías utilizadas
 * React
+* React Router DOM
 * Vite
 * CSS (BEM methodology)
 * Git & GitHub
 * GitHub Pages (deploy)
+
+## Funcionalidades de autenticación
+* **Registro de usuarios** (`/signup`): conectado a la API de TripleTen mediante el módulo `auth.js`.
+* **Inicio de sesión** (`/signin`): valida credenciales y obtiene un token JWT, el cual se almacena en `localStorage`.
+* **Rutas protegidas**: la ruta raíz `/` solo es accesible para usuarios autenticados mediante el componente `ProtectedRoute`. Los usuarios no autenticados son redirigidos a `/signin`.
+* **InfoTooltip**: ventana modal que informa al usuario si el registro fue exitoso o falló.
+* **Encabezado dinámico**: muestra "Inicia sesión" o "Regístrate" según la ruta para usuarios no autenticados, y el correo del usuario junto con la opción de "Cerrar sesión" para usuarios autenticados.
 
 ## Instalación y uso
 # Clonar repositorio

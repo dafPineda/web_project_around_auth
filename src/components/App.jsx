@@ -19,6 +19,7 @@ function App() {
   const [popup, setPopup] = useState(null)
   const [isLoggedIn, setIsLoggedIn]= useState(false)
   const [infoTooltip, setInfoTooltip] = useState({ isOpen: false, isSuccess: false });
+  const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
   useEffect(()=>{
@@ -83,6 +84,7 @@ function App() {
         navigate("/web_project_around_react/signin")
         console.log('Registro exitoso:', data);
         setInfoTooltip({ isOpen: true, isSuccess: true });
+        auth.validToken
       })
       .catch((err) => {
         setInfoTooltip({ isOpen: true, isSuccess: false });
@@ -90,25 +92,34 @@ function App() {
       });
   };
 
-  async function handleLogin(email, password){
-    auth.login(email, password)
-    .then((data) => {
-        console.log('Inicio exitoso:', data);
-        setIsLoggedIn(true)
-        navigate("/web_project_around_react/")
-      })
-      .catch((err) => {
-        console.error('Error al registrar:', err);
-        setInfoTooltip({ isOpen: true, isSuccess: false });
-      });
-  }
+ async function handleLogin(email, password){
+  auth.login(email, password)
+  .then((data) => {
+    localStorage.setItem('jwt', data.token);
+    return auth.validToken(data.token);
+  })
+  .then((userData) => {
+    setUserEmail(userData.data.email);
+    setIsLoggedIn(true);
+    return api.getAppInfo();
+  })
+  .then(([profileData, cardsData]) => {
+    setCurrentUser(profileData);
+    setCards(cardsData);
+    navigate("/web_project_around_react/");
+  })
+  .catch((err) => {
+    console.error('Error al registrar:', err);
+    setInfoTooltip({ isOpen: true, isSuccess: false });
+  });
+}
 
   function handleCloseSession(){
     setIsLoggedIn(false)
   }
   return (
     <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>
-      <Header isLoggedIn={isLoggedIn} closeSession={handleCloseSession}/>
+      <Header isLoggedIn={isLoggedIn} closeSession={handleCloseSession} userEmail={userEmail}/>
       <Routes className="page">
         <Route
           path="/" 

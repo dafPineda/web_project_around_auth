@@ -24,3 +24,14 @@ export const login = async(email, password) => {
     return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
   });
 };
+
+export const validToken = async (token) => {
+  console.log('BASE_URL:', BASE_URL, 'token:', token);
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'GET',
+    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }
+  })
+  .then((res) => {
+    return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
+  });
+}
