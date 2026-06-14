@@ -1,15 +1,26 @@
 import Header from "./Header/Header"
 import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
+import Login from "./Login/Login"
+import Register from "./Register/Register"
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute"
 import { useState, useEffect } from "react"
 import CurrentUserContext from "../contexts/CurrentUserContext"
 import Api from "../utils/api"
+import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
+import InfoTooltip from "./InfoTooltip/InfoTooltip"
+import * as auth from '../utils/auth';
 
 const api = new Api("https://around-api.es.tripleten-services.com/v1", {Authorization:"39e7e87b-63d8-4747-bf9f-2089ed281080", "Content-Type": "application/json"})
+
 function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
   const [popup, setPopup] = useState(null)
+  const [isLoggedIn, setIsLoggedIn]= useState(false)
+  const [infoTooltip, setInfoTooltip] = useState({ isOpen: false, isSuccess: false });
+  const [userEmail, setUserEmail] = useState('');
+  const navigate = useNavigate();
 
   useEffect(()=>{
     api.getAppInfo()
@@ -64,22 +75,84 @@ function App() {
        })
        .catch((error) => console.error(error));
   };
+  function handleCloseInfoTooltip() {
+    setInfoTooltip({ isOpen: false, isSuccess: false });
+  }
+  async function handleRegister(email, password){
+    auth.register(email, password)
+      .then((data) => {
+        navigate("/web_project_around_react/signin")
+        console.log('Registro exitoso:', data);
+        setInfoTooltip({ isOpen: true, isSuccess: true });
+        auth.validToken
+      })
+      .catch((err) => {
+        setInfoTooltip({ isOpen: true, isSuccess: false });
+        console.error('Error al registrar:', err);
+      });
+  };
+
+ async function handleLogin(email, password){
+  auth.login(email, password)
+  .then((data) => {
+    localStorage.setItem('jwt', data.token);
+    return auth.validToken(data.token);
+  })
+  .then((userData) => {
+    setUserEmail(userData.data.email);
+    setIsLoggedIn(true);
+    return api.getAppInfo();
+  })
+  .then(([profileData, cardsData]) => {
+    setCurrentUser(profileData);
+    setCards(cardsData);
+    navigate("/web_project_around_react/");
+  })
+  .catch((err) => {
+    console.error('Error al registrar:', err);
+    setInfoTooltip({ isOpen: true, isSuccess: false });
+  });
+}
+
+  function handleCloseSession(){
+    setIsLoggedIn(false)
+  }
   return (
     <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>
-    <div className="page">
-      <Header/>
-      <Main 
-        onOpenPopup={handleOpenPopup}
-        onClosePopup={handleClosePopup}
-        popup={popup}
-        cards={cards} 
-        setPopup={setPopup}
-        onCardClick={handleCardLike}
-        onCardDelete={handleCardDelete}
-        onAddPlaceSubmit={handleAddPlaceSubmit}/>
-      <Footer/>  
-    </div>
+      <Header isLoggedIn={isLoggedIn} closeSession={handleCloseSession} userEmail={userEmail}/>
+      <Routes className="page">
+        <Route
+          path="/" 
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Main 
+                onOpenPopup={handleOpenPopup}
+                onClosePopup={handleClosePopup}
+                popup={popup}
+                cards={cards} 
+                setPopup={setPopup}
+                onCardClick={handleCardLike}
+                onCardDelete={handleCardDelete}
+                onAddPlaceSubmit={handleAddPlaceSubmit}/>
+            </ProtectedRoute>
+          }
+            />
+        <Route path="/web_project_around_react/signin" element={<Login onLogin={handleLogin}/>}/>
+        <Route path="/web_project_around_react/signup" element={<Register onRegister={handleRegister}/>}/>
 
+        <Route path="*" element={
+          isLoggedIn ? (
+            <Navigate to="/" replace/>):(
+            <Navigate to="/web_project_around_react/signin" replace/>
+          )
+        }/> 
+      </Routes>
+      <InfoTooltip
+        isOpen={infoTooltip.isOpen}
+        onClose={handleCloseInfoTooltip}
+        isSuccess={infoTooltip.isSuccess}
+      />
+      <Footer/>  
     </CurrentUserContext.Provider>
   )
 }
