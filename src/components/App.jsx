@@ -7,8 +7,9 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute"
 import { useState, useEffect } from "react"
 import CurrentUserContext from "../contexts/CurrentUserContext"
 import Api from "../utils/api"
-import { Routes, Route, Navigate } from 'react-router-dom';
+import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
 import InfoTooltip from "./InfoTooltip/InfoTooltip"
+import * as auth from '../utils/auth';
 
 const api = new Api("https://around-api.es.tripleten-services.com/v1", {Authorization:"39e7e87b-63d8-4747-bf9f-2089ed281080", "Content-Type": "application/json"})
 
@@ -18,7 +19,7 @@ function App() {
   const [popup, setPopup] = useState(null)
   const [isLoggedIn, setIsLoggedIn]= useState(false)
   const [infoTooltip, setInfoTooltip] = useState({ isOpen: false, isSuccess: false });
-
+  const navigate = useNavigate();
 
   useEffect(()=>{
     api.getAppInfo()
@@ -76,9 +77,38 @@ function App() {
   function handleCloseInfoTooltip() {
     setInfoTooltip({ isOpen: false, isSuccess: false });
   }
+  async function handleRegister(email, password){
+    auth.register(email, password)
+      .then((data) => {
+        navigate("/web_project_around_react/signin")
+        console.log('Registro exitoso:', data);
+        setInfoTooltip({ isOpen: true, isSuccess: true });
+      })
+      .catch((err) => {
+        setInfoTooltip({ isOpen: true, isSuccess: false });
+        console.error('Error al registrar:', err);
+      });
+  };
+
+  async function handleLogin(email, password){
+    auth.login(email, password)
+    .then((data) => {
+        console.log('Inicio exitoso:', data);
+        setIsLoggedIn(true)
+        navigate("/web_project_around_react/")
+      })
+      .catch((err) => {
+        console.error('Error al registrar:', err);
+        setInfoTooltip({ isOpen: true, isSuccess: false });
+      });
+  }
+
+  function handleCloseSession(){
+    setIsLoggedIn(false)
+  }
   return (
     <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>
-      <Header isLoggedIn={isLoggedIn}/>
+      <Header isLoggedIn={isLoggedIn} closeSession={handleCloseSession}/>
       <Routes className="page">
         <Route
           path="/" 
@@ -96,8 +126,8 @@ function App() {
             </ProtectedRoute>
           }
             />
-        <Route path="/web_project_around_react/signin" element={<Login/>}/>
-        <Route path="/web_project_around_react/signup" element={<Register/>}/>
+        <Route path="/web_project_around_react/signin" element={<Login onLogin={handleLogin}/>}/>
+        <Route path="/web_project_around_react/signup" element={<Register onRegister={handleRegister}/>}/>
 
         <Route path="*" element={
           isLoggedIn ? (

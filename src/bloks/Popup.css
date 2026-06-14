@@ -53,3 +53,19 @@
     max-width: 75vw;
     max-height: 75vh;
 }
+.infoTooltip__text{
+    justify-self: center;
+}
+.infoTooltip__image{
+    background-repeat: no-repeat;
+    background-size: cover;
+    justify-self: center;
+    height: 270px;
+    width: 270px;
+}
+.infoTooltip__image_success{
+    background-image: url('../images/sucessSign.png');
+}
+.infoTooltip__image_error{
+    background-image: url('../images/failSign.png');
+}

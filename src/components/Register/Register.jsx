@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-export default function Register(){
+
+export default function Register({onRegister}){
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
 
@@ -12,6 +13,7 @@ export default function Register(){
     }
     const handleSubmit = (event) => {
         event.preventDefault(); 
+        onRegister(email, password);
     };
     return(
         <section className="sign">
@@ -25,7 +27,6 @@ export default function Register(){
                     id="email"
                     type="email"
                     value={email}
-                    onChange={handleEmailChange}
                     required
                     onChange={handleEmailChange}/>
                     <input
@@ -35,7 +36,6 @@ export default function Register(){
                     id="password"
                     type="string"
                     value={password}
-                    onChange={handlePasswordtChange}
                     required
                     onChange={handlePasswordtChange}
                     />

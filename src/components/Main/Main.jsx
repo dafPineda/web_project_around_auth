@@ -13,6 +13,7 @@ function Main({onOpenPopup, onClosePopup, popup, cards, onCardClick, onCardDelet
     const userContext = useContext(CurrentUserContext)
     const currentUser = userContext.currentUser
     const [selectedCard, setSelectedCard] = useState(null)
+    
     const newCardPopup = {title: "Nuevo lugar", children:  <NewCard onPlaceSubmit={onAddPlaceSubmit}/>};
     const editProfilePopup = {title: "Editar perfil", children: <EditProfile/>}
     const editAvatarPopup = {title:"Editar avatar", children:<EditAvatar/>}

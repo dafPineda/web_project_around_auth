@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { useState } from "react"
 
-export default function Login(){
+export default function Login({onLogin}){
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
 
@@ -12,7 +12,8 @@ export default function Login(){
         setPassword(event.target.value)
     }
     const handleSubmit = (event) => {
-        event.preventDefault(); 
+        event.preventDefault()
+        onLogin(email, password)
     };
     return(
         <section className="sign">
