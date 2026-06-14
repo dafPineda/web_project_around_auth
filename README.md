@@ -34,10 +34,10 @@ El objetivo principal fue entender el flujo de renderizado en React, el manejo d
 
 ## Instalación y uso
 # Clonar repositorio
-git clone https://github.com/tu-usuario/web_project_around_react.git
+git clone https://github.com/tu-usuario/web_project_around_auth.git
 
 # Entrar al proyecto
-cd web_project_around_react
+cd web_project_around_auth
 
 # Instalar dependencias
 npm install
