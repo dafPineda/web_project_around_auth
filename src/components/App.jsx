@@ -11,7 +11,7 @@ import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
 import InfoTooltip from "./InfoTooltip/InfoTooltip"
 import * as auth from '../utils/auth';
 
-const api = new Api("https://around-api.es.tripleten-services.com/v1", {Authorization:"39e7e87b-63d8-4747-bf9f-2089ed281080", "Content-Type": "application/json"})
+const api = new Api("https://around-api.es.tripleten-services.com/v1")
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
@@ -23,11 +23,24 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    api.getAppInfo()
-    .then(([userData, cardsData])=>{
-      setCurrentUser(userData)
-      setCards(cardsData)
+    const token = localStorage.getItem("jwt");
+    if (!token) return;
+
+    auth.validToken(token)
+    .then((userData) => {
+      setUserEmail(userData.data.email);
+      setIsLoggedIn(true);
+      return api.getAppInfo();
     })
+    .then(([profileData, cardsData]) => {
+      setCurrentUser(profileData);
+      setCards(cardsData);
+      navigate("/web_project_around_react/");
+    })
+    .catch((err) => {
+      console.error('Token inválido:', err);
+      localStorage.removeItem("jwt");
+    });
   },[])
 
   async function handleCardLike(card) {
@@ -84,7 +97,6 @@ function App() {
         navigate("/web_project_around_react/signin")
         console.log('Registro exitoso:', data);
         setInfoTooltip({ isOpen: true, isSuccess: true });
-        auth.validToken
       })
       .catch((err) => {
         setInfoTooltip({ isOpen: true, isSuccess: false });
@@ -99,9 +111,9 @@ function App() {
     return auth.validToken(data.token);
   })
   .then((userData) => {
-    setUserEmail(userData.data.email);
-    setIsLoggedIn(true);
-    return api.getAppInfo();
+    setUserEmail(userData.data.email)
+    setIsLoggedIn(true)
+    return api.getAppInfo()
   })
   .then(([profileData, cardsData]) => {
     setCurrentUser(profileData);
@@ -116,6 +128,7 @@ function App() {
 
   function handleCloseSession(){
     setIsLoggedIn(false)
+    localStorage.removeItem("jwt")
   }
   return (
     <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>

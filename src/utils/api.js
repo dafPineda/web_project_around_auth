@@ -1,7 +1,9 @@
 export default class Api{
-    constructor(baseUrl, headers){
+    constructor(baseUrl){
     this.baseUrl = baseUrl
-    this.headers =  headers  
+  }
+  _getHeaders(){
+    return {Authorization:"39e7e87b-63d8-4747-bf9f-2089ed281080", "Content-Type": "application/json"}
   }
   _checkError(res) {
     if (res.ok) {
@@ -22,22 +24,23 @@ export default class Api{
 
   getInitialCards(){
     return fetch(`${this.baseUrl}/cards/`, {
-      headers: this.headers
+      headers: this._getHeaders()
     })
     .then(res=> this._checkError(res))
     .catch((err) => console.log(err))
   }
   getUserInfo(){
-    return fetch(`${this.baseUrl}/users/me`,{
-      headers: this.headers
-    })
+    return fetch(`${this.baseUrl}/users/me`,
+      {
+        headers: this._getHeaders()
+      })
     .then(res=> this._checkError(res))
     .catch((err) => console.log(err))
   }
   setUserInfo(data){
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this.headers,
+      headers: this._getHeaders(),
       body: JSON.stringify({
         name: data.name,
         about: data.about
@@ -49,7 +52,7 @@ export default class Api{
   setUserAvatar(link){
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this.headers,
+      headers: this._getHeaders(),
       body: JSON.stringify({
         avatar: link
       })
@@ -60,7 +63,7 @@ export default class Api{
   addCard(data){
     return fetch(`${this.baseUrl}/cards/`,{
       method:"POST",
-      headers:this.headers,
+      headers: this._getHeaders(), 
       body: JSON.stringify({
         name:data.name,
         link: data.link
@@ -72,7 +75,7 @@ export default class Api{
   dislike(id){
     return fetch(`${this.baseUrl}/cards/${id}/likes`, {
       method:"DELETE",
-      headers: this.headers
+      headers: this._getHeaders()
     })
     .then(res=> this._checkError(res))
     .catch((err) => console.log(err))
@@ -80,14 +83,14 @@ export default class Api{
   like(id){
     return fetch(`${this.baseUrl}/cards/${id}/likes`, {
       method: "PUT",
-      headers:this.headers
-    }).then(this._checkError)
+      headers: this._getHeaders(),    
+    }).then(res => this._checkError(res))
     .catch((err) => console.log(err))
   }
   deleteCard(id){
     return fetch(`${this.baseUrl}/cards/${id}`,{
       method: "DELETE",
-      headers:this.headers
+      headers: this._getHeaders(),    
     })
     .then(res=> this._checkError(res))
     .catch(err => console.log(err))
